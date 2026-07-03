@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌍 全球一周热点</title>
+
+  <!-- 字体 & 图标 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Three.js import map（正式上线改本地打包） -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ═══ 顶部 Header ═══ -->
+  <header id="header">
+    <h1>🌍 全球热点热力图</h1>
+    <span id="stats">加载中…</span>
+  </header>
+
+  <!-- ═══ 时间轴 ═══ -->
+  <nav id="timeline">
+    <div id="timeline-presets">
+      <button class="preset active" data-range="7">过去 7 天</button>
+      <button class="preset" data-range="3">过去 3 天</button>
+      <button class="preset" data-range="1">今天</button>
+    </div>
+    <div id="timeline-bar">
+      <div id="timeline-track"></div>
+      <div id="timeline-fill"></div>
+    </div>
+    <button id="btn-jump-today" title="跳到今天">📍 今天</button>
+  </nav>
+
+  <!-- ═══ 当前视角摘要 ═══ -->
+  <div id="view-summary" class="hidden">
+    <span id="view-label">当前视角</span>
+    <ul id="view-events"></ul>
+  </div>
+
+  <!-- ═══ 3D 地球容器 ═══ -->
+  <main id="globe-container">
+    <canvas id="globe-canvas"></canvas>
+
+    <!-- 加载遮罩 -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>加载全球事件…</p>
+    </div>
+
+    <!-- 详情卡 -->
+    <aside id="detail-card" class="hidden">
+      <button id="detail-close" title="关闭">×</button>
+      <div id="detail-tags"></div>
+      <div id="detail-category"></div>
+      <div id="detail-location"></div>
+      <div id="detail-summary">
+        <span class="label">🤖 AI 摘要</span>
+        <p></p>
+      </div>
+      <div id="detail-meta">
+        <span id="detail-importance"></span>
+        <span id="detail-tone"></span>
+      </div>
+      <a id="detail-link" href="#" target="_blank" rel="noopener">查看原文 →</a>
+    </aside>
+
+    <!-- 图例面板 -->
+    <aside id="legend">
+      <h3>📌 事件类别</h3>
+      <ul id="legend-list"></ul>
+      <hr>
+      <div id="legend-highlight">
+        <span class="dot tech"></span> 🟡 科技高亮<br>
+        <span class="dot finance"></span> 🟡 金融高亮
+      </div>
+      <hr>
+      <div id="legend-controls">
+        <span id="auto-refresh-status">自动刷新: 60s</span>
+      </div>
+    </aside>
+
+    <!-- 提示：拖动 / 缩放 -->
+    <div id="hint">🖱 拖动旋转 · 滚轮缩放</div>
+  </main>
+
+  <!-- ═══ JS 模块 ═══ -->
+  <script src="js/config.js"></script>
+  <script src="js/data-loader.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
