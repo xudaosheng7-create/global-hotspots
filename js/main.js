@@ -11,7 +11,7 @@ import {
   initTimeline, showLoading, hideHint, updateAutoRefreshStatus,
 } from "./ui.js";
 
-const { AUTO_REFRESH_INTERVAL, CATEGORIES, DATA_URL } = window;
+const { AUTO_REFRESH_INTERVAL, CATEGORIES } = window;
 
 // ── 状态 ──
 let currentEvents = [];
@@ -50,27 +50,21 @@ async function main() {
 }
 
 // ── 日期显示 ────────────────────────────────────────
-async function updateDateLabel(events) {
-  // 优先从 today.json 取最新日期
-  let latest = "";
-  try {
-    const resp = await fetch(DATA_URL);
-    const todayData = await resp.json();
-    latest = todayData.date || "";
-  } catch (e) {
-    // fallback: 从事件中取最大 _date
-    const dates = [...new Set(events.map(e => e._date).filter(Boolean))];
-    latest = dates.sort().pop() || "";
+function updateDateLabel(events) {
+  const dates = [...new Set(events.map(e => e._date).filter(Boolean))];
+  const latest = dates.sort().pop() || "";
+  const el = document.getElementById("preset-today");
+  if (el && latest) {
+    el.textContent = formatDate(latest);
   }
-  const btn = document.getElementById("preset-today");
-  if (btn) btn.textContent = formatDate(latest) || "最新";
+  console.log("updateDateLabel: events=" + events.length + " dates=" + dates.length + " latest=" + latest + " el=" + !!el);
 }
 
 function formatDate(dateStr) {
   if (!dateStr || dateStr.length !== 8) return "";
   const m = parseInt(dateStr.substring(4, 6), 10);
   const d = parseInt(dateStr.substring(6, 8), 10);
-  return `${m}月${d}日`;
+  return m + "月" + d + "日";
 }
 
 // ── 数据加载 & 渲染 ──────────────────────────────────
@@ -88,7 +82,7 @@ async function loadAndRender() {
     currentEvents = events;
 
     // 更新按钮为实际日期
-    await updateDateLabel(events);
+    updateDateLabel(events);
 
     // 更新统计
     const stats = getStats(events);
