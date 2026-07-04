@@ -216,7 +216,10 @@ def fetch_gdelt_daily(date_str: str | None = None) -> tuple[list[dict], str]:
                         seen.add(evt["id"])
                         all_events.append(evt)
 
-        print(f"  ✅ {downloaded}/{len(timestamps)} 时段完成 → {len(all_events):,} 条唯一事件")
+        # 过滤掉中国大陆事件
+        all_events = [e for e in all_events if e["country"] != "CN"]
+
+        print(f"  ✅ {downloaded}/{len(timestamps)} 时段完成 → {len(all_events):,} 条唯一事件（已过滤中国）")
 
         if len(all_events) >= 50:
             all_events.sort(key=lambda x: x["importance"], reverse=True)

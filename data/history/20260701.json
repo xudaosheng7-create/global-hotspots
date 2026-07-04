@@ -1,6 +1,6 @@
 {
   "date": "20260701",
-  "total": 10,
+  "total": 9,
   "generated_at": "2026-07-01T00:10:00Z",
   "events": [
     {
@@ -70,30 +70,6 @@
         "冲突"
       ],
       "highlight": "general",
-      "ai_processed": true,
-      "_visible": true,
-      "_date": "20260701"
-    },
-    {
-      "id": "HIST-014",
-      "lat": 47.3769,
-      "lon": 8.5417,
-      "category": "合作互利",
-      "category_code": "02",
-      "color": "#66BB6A",
-      "location": "Zurich, Switzerland",
-      "country": "CN",
-      "source_url": "https://www.swissinfo.ch/eng/014",
-      "importance": 38.0,
-      "goldstein": 4.5,
-      "tone": 3.8,
-      "date_added": "20260701120000",
-      "summary": "瑞士银行推出加密货币托管服务。",
-      "tags": [
-        "加密货币",
-        "财经"
-      ],
-      "highlight": "finance",
       "ai_processed": true,
       "_visible": true,
       "_date": "20260701"

@@ -78,7 +78,7 @@ window.COUNTRY_ZH = {
   "TR": "土耳其", "ID": "印度尼西亚", "MY": "马来西亚",
   "SG": "新加坡", "TH": "泰国", "VN": "越南", "PH": "菲律宾",
   "MM": "缅甸", "KH": "柬埔寨", "LA": "老挝",
-  "TW": "台湾", "HK": "香港", "MO": "澳门",
+  "TW": "中国台湾", "HK": "中国香港", "MO": "中国澳门",
   "AF": "阿富汗", "UZ": "乌兹别克斯坦", "KZ": "哈萨克斯坦",
   "MN": "蒙古", "NP": "尼泊尔", "LK": "斯里兰卡",
   "LY": "利比亚", "TN": "突尼斯", "MA": "摩洛哥", "DZ": "阿尔及利亚",
@@ -131,7 +131,7 @@ window.getCountryZH = function (location, countryCode) {
       "Myanmar": "缅甸", "Cambodia": "柬埔寨",
       "Serbia": "塞尔维亚", "Croatia": "克罗地亚",
       "Hungary": "匈牙利", "Romania": "罗马尼亚", "Bulgaria": "保加利亚",
-      "Taiwan": "台湾", "Hong Kong": "香港",
+      "Taiwan": "中国台湾", "Hong Kong": "中国香港",
     };
     if (EN_MAP[last]) return EN_MAP[last];
   }
