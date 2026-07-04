@@ -49,24 +49,6 @@ async function main() {
   hideHint();
 }
 
-// ── 日期显示 ────────────────────────────────────────
-function updateDateLabel(events) {
-  const dates = [...new Set(events.map(e => e._date).filter(Boolean))];
-  const latest = dates.sort().pop() || "";
-  const el = document.getElementById("preset-today");
-  if (el && latest) {
-    el.textContent = formatDate(latest);
-  }
-  console.log("updateDateLabel: events=" + events.length + " dates=" + dates.length + " latest=" + latest + " el=" + !!el);
-}
-
-function formatDate(dateStr) {
-  if (!dateStr || dateStr.length !== 8) return "";
-  const m = parseInt(dateStr.substring(4, 6), 10);
-  const d = parseInt(dateStr.substring(6, 8), 10);
-  return m + "月" + d + "日";
-}
-
 // ── 数据加载 & 渲染 ──────────────────────────────────
 async function loadAndRender() {
   showLoading(true);
@@ -82,7 +64,6 @@ async function loadAndRender() {
     currentEvents = events;
 
     // 更新按钮为实际日期
-    updateDateLabel(events);
 
     // 更新统计
     const stats = getStats(events);
