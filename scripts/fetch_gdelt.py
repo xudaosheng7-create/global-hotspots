@@ -182,7 +182,7 @@ def _download_one(ts: str) -> list[dict]:
 
         except Exception as exc:
             if attempt == MAX_RETRIES:
-                print(f"  ⚠ {ts} → {exc}", file=sys.stderr)
+                print(f"  [WARN] {ts} -> {exc}", file=sys.stderr)
                 return []
     return []
 
@@ -196,10 +196,10 @@ def fetch_gdelt_daily(date_str: str | None = None) -> tuple[list[dict], str]:
 
     for offset in range(MAX_DAY_FALLBACK):
         try_date = _offset_date(date_str, -offset)
-        print(f"\n📅 尝试日期: {try_date}")
+        print(f"\n[TRY] Date: {try_date}")
 
         timestamps = _gen_timestamps(try_date)
-        print(f"  ⬇ 并发下载 {len(timestamps)} 个时段 ({MAX_WORKERS} 并发)…")
+        print(f"  Downloading {len(timestamps)} files ({MAX_WORKERS} concurrent)...")
 
         all_events: list[dict] = []
         seen: set[str] = set()
@@ -210,7 +210,7 @@ def fetch_gdelt_daily(date_str: str | None = None) -> tuple[list[dict], str]:
             for fut in as_completed(futures):
                 downloaded += 1
                 if downloaded % 16 == 0:
-                    print(f"    📥 {downloaded}/{len(timestamps)}…")
+                    print(f"    [{downloaded}/{len(timestamps)}] ...")
                 for evt in fut.result():
                     if evt["id"] not in seen:
                         seen.add(evt["id"])
@@ -219,13 +219,13 @@ def fetch_gdelt_daily(date_str: str | None = None) -> tuple[list[dict], str]:
         # 过滤掉中国大陆事件
         all_events = [e for e in all_events if e["country"] != "CN"]
 
-        print(f"  ✅ {downloaded}/{len(timestamps)} 时段完成 → {len(all_events):,} 条唯一事件（已过滤中国）")
+        print(f"  [OK] {downloaded}/{len(timestamps)} complete -> {len(all_events):,} unique events (CN filtered)")
 
         if len(all_events) >= 50:
             all_events.sort(key=lambda x: x["importance"], reverse=True)
             return all_events[:MAX_EVENTS], try_date
 
-        print(f"  ⚠ 事件太少 ({len(all_events)})，尝试前一天…")
+        print(f"  [SKIP] Too few events ({len(all_events)}), trying previous day...")
 
     print("❌ 连续 4 天数据均不足，退出。")
     sys.exit(1)
@@ -251,15 +251,16 @@ def save_events(events: list[dict], date_str: str | None = None) -> None:
         with open(path, "w", encoding="utf-8") as f:
             json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(f"💾 保存 {len(events)} 条 → {DATA_DIR / 'today.json'}")
-    print(f"📦 归档 → {HISTORY_DIR / f'{date_str}.json'}")
+    print(f"[SAVE] {len(events)} events -> {DATA_DIR / 'today.json'}")
+    print(f"[ARCHIVE] -> {HISTORY_DIR / f'{date_str}.json'}")
 
 
 # ── 入口 ──────────────────────────────────────────────
 
 if __name__ == "__main__":
     date_arg = sys.argv[1] if len(sys.argv) > 1 else None
-    print(f"🌍 GDELT v2 数据拉取 — {date_arg or '自动（今天→昨天回溯）'}")
+    msg = f"GDELT v2 data fetch — {date_arg or 'auto (today -> fallback)'}"
+    print(msg)
     events, actual_date = fetch_gdelt_daily(date_arg)
     save_events(events, actual_date)
-    print(f"🏁 完成！{len(events)} 条事件已就绪（日期: {actual_date}）。")
+    print(f"[DONE] {len(events)} events ready (date: {actual_date}).")
