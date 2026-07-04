@@ -49,6 +49,22 @@ async function main() {
   hideHint();
 }
 
+// ── 日期显示 ────────────────────────────────────────
+function updateDateLabel(events) {
+  const dates = [...new Set(events.map(e => e._date).filter(Boolean))];
+  const latest = dates.sort().pop() || "";
+  const formatted = formatDate(latest);
+  const btn = document.getElementById("preset-today");
+  if (btn) btn.textContent = formatted;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr || dateStr.length !== 8) return dateStr;
+  const m = parseInt(dateStr.substring(4, 6), 10);
+  const d = parseInt(dateStr.substring(6, 8), 10);
+  return `${m}月${d}日`;
+}
+
 // ── 数据加载 & 渲染 ──────────────────────────────────
 async function loadAndRender() {
   showLoading(true);
@@ -62,7 +78,9 @@ async function loadAndRender() {
     }
 
     currentEvents = events;
-    console.log(`📊 加载 ${events.length} 条事件 (${currentDays} 天)`);
+
+    // 更新"今天"按钮为实际日期
+    updateDateLabel(events);
 
     // 更新统计
     const stats = getStats(events);
