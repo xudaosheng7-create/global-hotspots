@@ -22,8 +22,9 @@ export async function loadTodayEvents() {
   const data = await loadJSON(DATA_URL);
   if (!data || !data.events) return [];
 
-  // 注入 _visible 字段
-  data.events.forEach(e => { e._visible = true; });
+  // 注入 _visible 和 _date 字段
+  const date = data.date || "";
+  data.events.forEach(e => { e._visible = true; e._date = date; });
   return data.events;
 }
 
@@ -54,12 +55,13 @@ export async function loadHistoryEvents(days = 7) {
   for (let i = 0; i < results.length; i++) {
     const data = results[i];
     if (!data || !data.events) continue;
+    const evtDate = data.date || dateList[i];
     for (const event of data.events) {
       // 按 id 去重
       if (seen.has(event.id)) continue;
       seen.add(event.id);
       event._visible = true;
-      event._date = dateList[i];
+      event._date = evtDate;
       allEvents.push(event);
     }
   }
